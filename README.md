@@ -784,22 +784,6 @@ The resulting Phase 1, Phase 2, and Phase 3 outputs are then displayed through t
 
 ---
 
-# Current Model Artifact
-
-The repository currently contains a placeholder `model.h5` file.
-
-The trained model artifact used for final inference should be placed at:
-
-```text
-backend/models/model.h5
-```
-
-The backend loads the model using TensorFlow/Keras before performing prediction.
-
-> **Note:** The trained model checkpoint is not currently included as a valid model artifact in this repository release. Replace the placeholder with the trained model before running the complete inference pipeline.
-
----
-
 # Limitations
 
 The project has several limitations identified during evaluation:
@@ -866,4 +850,3 @@ A project license has not yet been specified.
 
 **Research Prototype / Academic Project**
 
-The repository contains the implementation of the urban development analysis and prediction application. The trained model artifact and large SpaceNet-7 dataset are maintained separately from the source repository.
