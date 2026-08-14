@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Development Analysis</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🛰 Urban Development Analysis</h1>
+    <p>Group 17 · Batch-B · Amrita Vishwa Vidyapeetham · 22AIE498</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── Upload Card ── -->
+  <div class="upload-card">
+    <h2>Upload Satellite Image Stack</h2>
+    <p>Select multiple .tif images (ordered by date). The backend sorts them alphabetically by filename.</p>
+    <div class="file-input-wrapper">
+      <button class="btn btn-primary">📂 Choose .tif Files</button>
+      <input type="file" id="file-input" accept=".tif,.tiff" multiple />
+    </div>
+    <div id="file-count" style="margin-top:.75rem; color:var(--muted)">No files selected</div>
+    <br/>
+    <button id="analyze-btn" class="btn btn-success" disabled>🔍 Run Analysis</button>
+  </div>
+
+  <!-- ── Error ── -->
+  <div id="error-div" class="error-box" style="display:none"></div>
+
+  <!-- ── Loader ── -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <p>Running analysis — this may take a moment…</p>
+  </div>
+
+  <!-- ── Results ── -->
+  <div id="results">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tab-p1">📊 Phase 1 — Comparative</button>
+      <button class="tab-btn" data-tab="tab-p2">🔮 Phase 2 — Predictive</button>
+      <button class="tab-btn" data-tab="tab-p3">🏙 Phase 3 — Classification</button>
+    </div>
+
+    <!-- ════════════ PHASE 1 ════════════ -->
+    <div id="tab-p1" class="tab-panel active">
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="label">Baseline Area</div>
+          <div class="value" id="p1-baseline-area">—</div>
+          <div class="sub">acres (first image)</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Final Area</div>
+          <div class="value" id="p1-final-area">—</div>
+          <div class="sub">acres (last image)</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Total New Buildings</div>
+          <div class="value" id="p1-total-new-bldg">—</div>
+          <div class="sub">added over period</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Total Area Change</div>
+          <div class="value" id="p1-area-change">—</div>
+          <div class="sub">acres grown</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Baseline Count</div>
+          <div class="value" id="p1-baseline-count">—</div>
+          <div class="sub">buildings (first image)</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Final Count</div>
+          <div class="value" id="p1-final-count">—</div>
+          <div class="sub">buildings (last image)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Monthly Building Development</h3>
+        <canvas id="chartMonthly"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Monthly Area Change</h3>
+        <canvas id="chartArea"></canvas>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="card">
+          <h3>Urban Change Trend (Cumulative)</h3>
+          <canvas id="chartCumulative"></canvas>
+        </div>
+        <div class="card">
+          <h3>Seasonal Analysis</h3>
+          <canvas id="chartSeasonal"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Monthly Records Table</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Start</th><th>End</th>
+                <th>Prev Count</th><th>Curr Count</th><th>New Buildings</th>
+                <th>Prev Area</th><th>Curr Area</th><th>Area Δ</th><th>Season</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ PHASE 2 ════════════ -->
+    <div id="tab-p2" class="tab-panel">
+      <div class="card">
+        <h3>Transformer-CNN-LSTM Prediction Results</h3>
+        <div class="img-grid">
+          <div class="img-box">
+            <span>Last Image of Input Stack + Highlighted Changes</span>
+            <img id="img-last-input" src="" alt="Last input image" />
+          </div>
+          <div class="img-box">
+            <span>Predicted Mask (Next Month)</span>
+            <img id="img-predicted-mask" src="" alt="Predicted mask" />
+          </div>
+          <div class="img-box">
+            <span>Predicted Changes Overlay</span>
+            <img id="img-highlighted" src="" alt="Highlighted changes" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ PHASE 3 ════════════ -->
+    <div id="tab-p3" class="tab-panel">
+
+      <div class="card">
+        <h3>Urban Growth Classification</h3>
+        <div id="p3-result-box" class="result-box"></div>
+        <div style="margin-top:1rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+          <div>
+            <span style="color:var(--muted); font-size:.8rem; margin-right:.5rem">Urban Development Class</span>
+            <span id="urban-class-badge" class="badge">—</span>
+          </div>
+          <div>
+            <span style="color:var(--muted); font-size:.8rem; margin-right:.5rem">Building Growth Class</span>
+            <span id="bldg-class-badge" class="badge">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Urban Development Contribution</h3>
+        <canvas id="chartContribution"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>U-Net Cloud Segmentation</h3>
+        <div class="img-grid">
+          <div class="img-box">
+            <span>Detected Cloud Mask</span>
+            <img id="img-cloud-mask" src="" alt="Cloud mask" />
+          </div>
+          <div class="img-box">
+            <span>Cloud Mask Overlay on Last Image</span>
+            <img id="img-cloud-overlay" src="" alt="Cloud overlay" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- end Phase 3 -->
+
+  </div>
+  <!-- end #results -->
+</div>
+<!-- end .container -->
+
+<script src="app.js"></script>
+</body>
+</html>
