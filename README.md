@@ -132,6 +132,71 @@ The project includes a browser-based interface that allows users to:
                     and Development Classification
 ```
 
+
+---
+
+## Visual Results
+
+### Hybrid Model Architecture
+
+The proposed cloud-aware hybrid pipeline combines cloud segmentation, CNN-based spatial feature extraction, Transformer-based temporal attention, LSTM-based sequential modelling, and auto-regressive prediction.
+
+<p align="center">
+  <img src="results/hybrid_model_architecture.png" alt="Cloud-aware hybrid CNN Transformer LSTM architecture" width="900">
+</p>
+
+### Historical Urban Growth
+
+The historical analysis captures spatial urban-density patterns and changes in development across the temporal observation period.
+
+<p align="center">
+  <img src="results/historical_urban_growth_heatmap.jpeg" alt="Historical urban growth heatmap" width="650">
+</p>
+
+### Monthly Urban Development
+
+The system tracks month-by-month building development and urban-area change to identify temporal growth patterns.
+
+<p align="center">
+  <img src="results/monthly_building_development.png" alt="Monthly building development" width="800">
+</p>
+
+### Prediction vs Ground Truth
+
+The predictive model generates future building masks that can be compared with corresponding ground-truth building footprints.
+
+<p align="center">
+  <img src="results/prediction_vs_ground_truth.jpeg" alt="Predicted building mask compared with ground truth" width="850">
+</p>
+
+### Auto-Regressive Multi-Step Forecasting
+
+Predicted building masks can be iteratively fed back into the model to generate multi-step future urban-growth forecasts.
+
+<p align="center">
+  <img src="results/autoregressive_forecast.jpeg" alt="Auto-regressive multi-step forecast" width="850">
+</p>
+
+### Cloud-Aware Prediction
+
+The cloud-aware component identifies cloud-contaminated regions and supports improved building delineation in areas affected by cloud cover.
+
+<p align="center">
+  <img src="results/cloud_mask.png" alt="Binary cloud mask" width="850">
+</p>
+
+<p align="center">
+  <img src="results/cloud_aware_prediction.jpeg" alt="Cloud-aware building prediction compared with ground truth" width="850">
+</p>
+
+### Training Performance
+
+Training curves show the progression of loss, accuracy, and IoU during model training.
+
+<p align="center">
+  <img src="results/training_performance.jpeg" alt="Training loss accuracy and IoU" width="850">
+</p>
+
 ---
 
 ## Dataset
