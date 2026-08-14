@@ -1,0 +1,13 @@
+
+fastapi
+uvicorn
+tensorflow
+numpy
+rasterio
+Pillow
+scikit-learn
+scipy
+matplotlib
+python-multipart
+python-dateutil
+opencv-python
